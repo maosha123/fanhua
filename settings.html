@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更多设置 - 凡化茶树</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkGreen: '#2E7D32',
+                        lightGreen: '#C8E6C9',
+                        mediumGreen: '#66BB6A',
+                        teaBrown: '#8D6E63',
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            .btn-press {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 顶部标题栏 -->
+    <header class="bg-darkGreen text-white py-4 px-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <button id="backBtn" class="text-white">
+                <i class="fa fa-arrow-left text-xl"></i>
+            </button>
+            <div class="text-center">
+                <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold text-shadow">更多设置</h1>
+            </div>
+            <div class="w-10"></div> <!-- 占位元素，保持标题居中 -->
+        </div>
+    </header>
+
+    <!-- 主体内容区 -->
+    <main class="container mx-auto px-4 py-8 pb-24">
+        <div class="bg-white rounded-xl card-shadow">
+            <!-- 修改用户名 -->
+            <div class="p-4 border-b border-gray-100">
+                <h3 class="font-bold text-gray-800 mb-4">账户设置</h3>
+                <div class="flex items-center">
+                    <label for="userNameInput" class="w-24 text-gray-600">用户名</label>
+                    <input type="text" id="userNameInput" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-mediumGreen focus:border-transparent"
+                        placeholder="请输入用户名">
+                    <button id="saveNameBtn" class="ml-3 bg-mediumGreen text-white px-4 py-2 rounded-lg hover:bg-darkGreen transition duration-200">保存</button>
+                </div>
+            </div>
+
+            <!-- 系统设置 -->
+            <div class="p-4 border-b border-gray-100">
+                <h3 class="font-bold text-gray-800 mb-4">系统设置</h3>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <i class="fa fa-bell text-gray-500 mr-3"></i>
+                        <span>消息通知</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="notificationToggle" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-mediumGreen"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fa fa-moon-o text-gray-500 mr-3"></i>
+                        <span>夜间模式</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="darkModeToggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-mediumGreen"></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 数据管理 -->
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-4">数据管理</h3>
+                <button id="clearDataBtn" class="flex items-center text-red-500 hover:bg-red-50 p-2 rounded-lg transition duration-200">
+                    <i class="fa fa-trash mr-3"></i>
+                    <span>清除所有数据</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+        <div class="grid grid-cols-3 h-16">
+            <a href="index.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-home text-xl mb-1"></i>
+                <span>首页</span>
+            </a>
+            <a href="ranking.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-trophy text-xl mb-1"></i>
+                <span>排行榜</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-user text-xl mb-1"></i>
+                <span>个人中心</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- 确认弹窗 -->
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">确认清除数据</h3>
+            <p class="text-gray-600 mb-6">此操作将清除所有本地数据，包括能量、茶树进度和用户信息，且无法恢复。确定要继续吗？</p>
+            <div class="flex justify-end space-x-3">
+                <button id="cancelClearBtn" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200">取消</button>
+                <button id="confirmClearBtn" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200">确认清除</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取用户数据
+        function getAppData() {
+            const appData = localStorage.getItem('teaPlantAppData');
+            return appData ? JSON.parse(appData) : { userName: '茶农12345' };
+        }
+
+        // 保存用户数据
+        function saveAppData(data) {
+            localStorage.setItem('teaPlantAppData', JSON.stringify(data));
+        }
+
+        // 初始化页面
+        function initPage() {
+            const data = getAppData();
+            document.getElementById('userNameInput').value = data.userName || '';
+        }
+
+        // 返回按钮事件
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.history.back();
+        });
+
+        // 保存用户名
+        document.getElementById('saveNameBtn').addEventListener('click', () => {
+            const newName = document.getElementById('userNameInput').value.trim();
+            if (newName && newName.length <= 10) {
+                const data = getAppData();
+                data.userName = newName;
+                saveAppData(data);
+                alert('用户名保存成功！');
+                window.history.back();
+            } else if (newName.length > 10) {
+                alert('用户名不能超过10个字符');
+            } else {
+                alert('请输入有效的用户名');
+            }
+        });
+
+        // 清除数据相关事件
+        document.getElementById('clearDataBtn').addEventListener('click', () => {
+            document.getElementById('confirmModal').classList.remove('hidden');
+        });
+
+        document.getElementById('cancelClearBtn').addEventListener('click', () => {
+            document.getElementById('confirmModal').classList.add('hidden');
+        });
+
+        document.getElementById('confirmClearBtn').addEventListener('click', () => {
+            localStorage.removeItem('teaPlantAppData');
+            document.getElementById('confirmModal').classList.add('hidden');
+            alert('所有数据已清除');
+            window.location.href = 'index.html';
+        });
+
+        // 按钮点击效果
+        document.querySelectorAll('button, a').forEach(element => {
+            element.addEventListener('mousedown', () => {
+                element.classList.add('btn-press');
+            });
+            
+            element.addEventListener('mouseup', () => {
+                element.classList.remove('btn-press');
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.classList.remove('btn-press');
+            });
+        });
+
+        window.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

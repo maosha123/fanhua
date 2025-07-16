@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开始种树 - 凡化茶树</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkGreen: '#2E7D32',
+                        lightGreen: '#C8E6C9',
+                        mediumGreen: '#66BB6A',
+                        teaBrown: '#8D6E63',
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            .progress-bar {
+                transition: width 0.5s ease-in-out;
+            }
+            .btn-press {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 顶部标题栏 -->
+    <header class="bg-darkGreen text-white py-4 px-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <button id="backBtn" class="text-white">
+                <i class="fa fa-arrow-left text-xl"></i>
+            </button>
+            <div class="text-center">
+                <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold text-shadow">开始种树</h1>
+            </div>
+            <div class="w-10"></div> <!-- 占位元素，保持标题居中 -->
+        </div>
+    </header>
+
+    <!-- 主体内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <div class="text-center mb-8">
+                <div id="treeStage" class="text-8xl mb-4">🌱</div>
+                <p id="treeStatus" class="text-gray-700 text-xl">幼苗阶段</p>
+                <div class="mt-4 mb-2">
+                    <p class="text-gray-700 text-sm mb-1" id="stageProgressText">成长进度: 0/3次施肥</p>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div id="stageProgressBar" class="progress-bar bg-mediumGreen h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <p class="text-gray-700 mb-2 text-center">当前能量: <span id="fertilizerEnergy" class="font-bold text-darkGreen">65</span>/100</p>
+                <div class="w-full bg-gray-200 rounded-full h-5 mb-2">
+                    <div id="fertilizerProgress" class="progress-bar bg-darkGreen h-full rounded-full" style="width: 65%"></div>
+                </div>
+                <p class="text-sm text-gray-500 text-center">每积累100能量可兑换1次施肥</p>
+            </div>
+            
+            <button id="fertilizeBtn" class="w-full bg-mediumGreen hover:bg-darkGreen text-white font-bold py-4 px-4 rounded-lg transition duration-300 text-lg">
+                <i class="fa fa-leaf mr-2"></i> 施肥
+            </button>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+        <div class="grid grid-cols-3 h-16">
+            <a href="index.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-home text-xl mb-1"></i>
+                <span>首页</span>
+            </a>
+            <a href="ranking.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-trophy text-xl mb-1"></i>
+                <span>排行榜</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-user text-xl mb-1"></i>
+                <span>个人中心</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化应用数据
+        function initAppData() {
+            const today = new Date().toISOString().split('T')[0];
+            const appData = localStorage.getItem('teaPlantAppData');
+            
+            if (!appData) {
+                // 首次使用，初始化数据
+                const initialData = {
+                    energy: 65,
+                    maxEnergy: 100,
+                    totalEnergy: 120,
+                    treeCount: 1, // 新用户初始1株茶苗
+                    treeStage: 0, // 0: 幼苗, 1: 成苗, 2: 成熟
+                    stageProgress: 0, // 当前阶段施肥进度
+                    stageRequirements: [3, 5], // 各阶段所需施肥次数
+                    lastEnergyDate: null,
+                    dailyEnergyEarned: 0,
+                    userName: `茶农${Math.floor(10000 + Math.random() * 90000)}`,
+                    isNewUser: true // 新用户标识
+                };
+                localStorage.setItem('teaPlantAppData', JSON.stringify(initialData));
+                return initialData;
+            } else {
+                const data = JSON.parse(appData);
+                // 检查是否是新的一天，重置每日能量获取
+                if (data.lastEnergyDate !== today) {
+                    data.dailyEnergyEarned = 0;
+                    data.lastEnergyDate = today;
+                    localStorage.setItem('teaPlantAppData', JSON.stringify(data));
+                }
+                return data;
+            }
+        }
+
+        // 获取应用数据
+        function getAppData() {
+            const appData = localStorage.getItem('teaPlantAppData');
+            if (!appData) return initAppData();
+            
+            // 解析现有数据并添加新属性默认值
+            const data = JSON.parse(appData);
+            if (data.stageProgress === undefined) data.stageProgress = 0;
+            if (data.stageRequirements === undefined) data.stageRequirements = [3, 5];
+            if (data.isNewUser === undefined) data.isNewUser = false;
+            
+            return data;
+        }
+
+        // 保存应用数据
+        function saveAppData(data) {
+            localStorage.setItem('teaPlantAppData', JSON.stringify(data));
+            console.log('应用数据已保存');
+        }
+
+        // 更新UI显示
+        function updateUI() {
+            const data = getAppData();
+            
+            // 更新能量显示
+            const energyPercent = Math.min(100, Math.round((data.energy / data.maxEnergy) * 100));
+            document.getElementById('fertilizerEnergy').textContent = data.energy;
+            document.getElementById('fertilizerProgress').style.width = `${energyPercent}%`;
+            
+            // 更新茶树阶段显示
+            const treeStages = ['🌱', '🌿', '🍵'];
+            const treeStatusTexts = ['幼苗阶段', '成苗阶段', '成熟阶段'];
+            document.getElementById('treeStage').textContent = treeStages[data.treeStage];
+            document.getElementById('treeStatus').textContent = treeStatusTexts[data.treeStage];
+            
+            // 更新成长进度显示
+            if (data.treeStage < 2) {
+                const required = data.stageRequirements[data.treeStage];
+                const progressPercent = Math.round((data.stageProgress / required) * 100);
+                document.getElementById('stageProgressText').textContent = `成长进度: ${data.stageProgress}/${required}次施肥`;
+                document.getElementById('stageProgressBar').style.width = `${progressPercent}%`;
+            } else {
+                // 成熟阶段隐藏进度条
+                document.getElementById('stageProgressText').style.display = 'none';
+                document.getElementById('stageProgressBar').style.display = 'none';
+            }
+        }
+
+        // 施肥功能
+        function fertilizeTree() {
+            const data = getAppData();
+            
+            if (data.energy >= data.maxEnergy) {
+                // 消耗能量施肥
+                data.energy -= data.maxEnergy;
+                
+                // 茶树生长阶段提升
+                if (data.treeStage < 2) {
+                    data.treeStage++;
+                    console.log(`茶树已进入${data.treeStage === 1 ? '成苗' : '成熟'}阶段`);
+                    
+                    // 如果茶树成熟，提示可以兑换礼品
+                    if (data.treeStage === 2) {
+                        setTimeout(() => {
+                            alert('恭喜！您的茶树已成熟，可以兑换凡化村茶叶礼品了！');
+                        }, 500);
+                    }
+                } else {
+                    // 成熟茶树施肥，增加茶苗数量
+                    data.treeCount++;
+                    console.log('获得新茶苗！当前拥有茶苗：' + data.treeCount + '株');
+                    alert('恭喜！您获得了一株新茶苗！');
+                }
+                
+                saveAppData(data);
+                updateUI();
+            } else {
+                alert('能量不足，无法施肥！需要100能量才能施肥。');
+                console.log('施肥失败：能量不足');
+            }
+        }
+
+        // 初始化事件监听
+        function initEventListeners() {
+            // 返回按钮
+            document.getElementById('backBtn').addEventListener('click', () => {
+                window.history.back();
+            });
+            
+            // 施肥按钮
+            document.getElementById('fertilizeBtn').addEventListener('click', fertilizeTree);
+            
+            // 按钮点击效果
+            document.querySelectorAll('button, a').forEach(element => {
+                element.addEventListener('mousedown', () => {
+                    element.classList.add('btn-press');
+                });
+                
+                element.addEventListener('mouseup', () => {
+                    element.classList.remove('btn-press');
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    element.classList.remove('btn-press');
+                });
+            });
+        }
+
+        // 初始化应用
+        function initApp() {
+            console.log('开始种树页面初始化');
+            initAppData();
+            updateUI();
+            initEventListeners();
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

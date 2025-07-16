@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 凡化茶树</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkGreen: '#2E7D32',
+                        lightGreen: '#C8E6C9',
+                        mediumGreen: '#66BB6A',
+                        teaBrown: '#8D6E63',
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            .btn-press {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 顶部标题栏 -->
+    <header class="bg-darkGreen text-white py-4 px-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <button id="backBtn" class="text-white">
+                <i class="fa fa-arrow-left text-xl"></i>
+            </button>
+            <div class="text-center">
+                <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold text-shadow">关于我们</h1>
+            </div>
+            <div class="w-10"></div> <!-- 占位元素，保持标题居中 -->
+        </div>
+    </header>
+
+    <!-- 主体内容区 -->
+    <main class="container mx-auto px-4 py-8 pb-24">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-24 h-24 bg-lightGreen rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-leaf text-4xl text-darkGreen"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">凡化茶树公益小程序</h2>
+                <p class="text-gray-500">版本 1.0.0</p>
+            </div>
+
+            <div class="space-y-6 text-gray-700">
+                <section>
+                    <h3 class="text-xl font-bold text-darkGreen mb-3">项目介绍</h3>
+                    <p class="leading-relaxed">凡化茶树公益小程序旨在通过趣味互动的方式，提高公众对茶树种植和生态保护的认识。用户可以通过完成日常任务、参与知识问答等方式积累能量，用于虚拟茶树的种植和养护，同时了解真实的茶文化和生态保护知识。</p>
+                </section>
+
+                <section>
+                    <h3 class="text-xl font-bold text-darkGreen mb-3">开发团队</h3>
+                    <p class="leading-relaxed">本项目由凡化公益团队开发，团队致力于将公益理念与数字技术相结合，通过创新的方式推动环保和文化保护事业的发展。</p>
+                </section>
+
+                <section>
+                    <h3 class="text-xl font-bold text-darkGreen mb-3">联系方式</h3>
+                    <div class="flex items-center mb-2">
+                        <i class="fa fa-envelope text-gray-500 mr-3 w-5 text-center"></i>
+                        <span>contact@fanhua-tea.org</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa fa-phone text-gray-500 mr-3 w-5 text-center"></i>
+                        <span>400-123-4567</span>
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="text-xl font-bold text-darkGreen mb-3">版权信息</h3>
+                    <p class="leading-relaxed">© 2023 凡化公益团队 版权所有。本小程序内所有文字、图片、音频、视频等内容未经许可，不得擅自用于商业用途。</p>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+        <div class="grid grid-cols-3 h-16">
+            <a href="index.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-home text-xl mb-1"></i>
+                <span>首页</span>
+            </a>
+            <a href="ranking.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-trophy text-xl mb-1"></i>
+                <span>排行榜</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-user text-xl mb-1"></i>
+                <span>个人中心</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // 返回按钮事件
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.history.back();
+        });
+
+        // 按钮点击效果
+        document.querySelectorAll('button, a').forEach(element => {
+            element.addEventListener('mousedown', () => {
+                element.classList.add('btn-press');
+            });
+            
+            element.addEventListener('mouseup', () => {
+                element.classList.remove('btn-press');
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.classList.remove('btn-press');
+            });
+        });
+
+        console.log('关于我们页面加载完成');
+    </script>
+</body>
+</html>

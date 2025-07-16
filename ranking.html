@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最新排名 - 凡化茶树</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkGreen: '#2E7D32',
+                        lightGreen: '#C8E6C9',
+                        mediumGreen: '#66BB6A',
+                        teaBrown: '#8D6E63',
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            .btn-press {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 顶部标题栏 -->
+    <header class="bg-darkGreen text-white py-4 px-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <button id="backBtn" class="text-white">
+                <i class="fa fa-arrow-left text-xl"></i>
+            </button>
+            <div class="text-center">
+                <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold text-shadow">茶农排行榜</h1>
+            </div>
+            <div class="w-10"></div> <!-- 占位元素，保持标题居中 -->
+        </div>
+    </header>
+
+    <!-- 主体内容区 -->
+    <main class="container mx-auto px-4 py-8 pb-24">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <!-- 排行榜头部 -->
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold text-gray-800">能量排行榜</h2>
+                <span class="text-sm text-gray-500">数据每24小时更新</span>
+            </div>
+
+            <!-- 前三名展示 -->
+            <div class="flex justify-center mb-12">
+                <!-- 第二名 -->
+                <div class="w-24 flex flex-col items-center mr-4">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-2 border-4 border-gray-300">
+                        <span class="text-2xl font-bold text-gray-700">2</span>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-bold text-gray-800">茶农B</p>
+                        <p class="text-darkGreen font-bold">420</p>
+                    </div>
+                </div>
+
+                <!-- 第一名 -->
+                <div class="w-32 flex flex-col items-center">
+                    <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-2 border-4 border-yellow-400">
+                        <span class="text-3xl font-bold text-yellow-600">1</span>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-bold text-gray-800 text-lg">茶农A</p>
+                        <p class="text-darkGreen font-bold text-lg">510</p>
+                    </div>
+                </div>
+
+                <!-- 第三名 -->
+                <div class="w-24 flex flex-col items-center ml-4">
+                    <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-2 border-4 border-amber-600">
+                        <span class="text-2xl font-bold text-amber-700">3</span>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-bold text-gray-800">茶农C</p>
+                        <p class="text-darkGreen font-bold">380</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 排行榜列表 -->
+            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                <!-- 第四名 -->
+                <div class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition duration-200">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-700 mr-3">4</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农D</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">350</span>
+                        <span class="text-gray-500 text-sm">能量</span>
+                    </div>
+                </div>
+
+                <!-- 第五名 -->
+                <div class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition duration-200">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-700 mr-3">5</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农E</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">320</span>
+                        <span class="text-gray-500 text-sm">能量</span>
+                    </div>
+                </div>
+
+                <!-- 第六名 -->
+                <div class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition duration-200">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-700 mr-3">6</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农F</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">290</span>
+                        <span class="text-gray-500 text-sm">能量</span>
+                    </div>
+                </div>
+
+                <!-- 第七名 -->
+                <div class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition duration-200">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-700 mr-3">7</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农G</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">260</span>
+                        <span class="text-gray-500 text-sm">能量</span>
+                    </div>
+                </div>
+
+                <!-- 第八名 -->
+                <div class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition duration-200">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-700 mr-3">8</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农H</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">230</span>
+                        <span class="text-gray-500 text-sm">能量</span>
+                    </div>
+                </div>
+
+                <!-- 当前用户 -->
+                <div class="flex items-center p-3 bg-lightGreen bg-opacity-30 rounded-lg border-2 border-mediumGreen">
+                    <div class="w-8 h-8 bg-mediumGreen rounded-full flex items-center justify-center font-bold text-white mr-3">25</div>
+                    <div class="flex-1">
+                        <p class="font-medium text-darkGreen">你</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">120</span>
+                        <span class="text-gray-500 text-sm">能量</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+        <div class="grid grid-cols-3 h-16">
+            <a href="index.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-home text-xl mb-1"></i>
+                <span>首页</span>
+            </a>
+            <a href="ranking.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-trophy text-xl mb-1"></i>
+                <span>排行榜</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-user text-xl mb-1"></i>
+                <span>个人中心</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // 获取用户数据
+        function getAppData() {
+            const appData = localStorage.getItem('teaPlantAppData');
+            return appData ? JSON.parse(appData) : { userName: '茶农12345', totalEnergy: 120 };
+        }
+
+        // 更新用户排名显示
+        function updateUserRanking() {
+            const data = getAppData();
+            // 在实际应用中，这里会根据服务器数据更新排名
+            // 这里简化处理，直接显示本地存储的能量值
+            document.querySelector('.bg-lightGreen .font-bold.text-darkGreen').textContent = data.totalEnergy;
+        }
+
+        // 返回按钮事件
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.history.back();
+        });
+
+        // 按钮点击效果
+        document.querySelectorAll('button, a').forEach(element => {
+            element.addEventListener('mousedown', () => {
+                element.classList.add('btn-press');
+            });
+            
+            element.addEventListener('mouseup', () => {
+                element.classList.remove('btn-press');
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.classList.remove('btn-press');
+            });
+        });
+
+        // 初始化页面
+        function initPage() {
+            updateUserRanking();
+            console.log('排行榜页面加载完成');
+        }
+
+        window.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

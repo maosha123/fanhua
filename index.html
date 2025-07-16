@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凡化茶树 - 公益小程序</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkGreen: '#2E7D32',
+                        lightGreen: '#C8E6C9',
+                        mediumGreen: '#66BB6A',
+                        teaBrown: '#8D6E63',
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            .progress-bar {
+                transition: width 0.5s ease-in-out;
+            }
+            .btn-press {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 顶部标题栏 -->
+    <header class="bg-darkGreen text-white py-4 px-4 shadow-md">
+        <div class="container mx-auto flex flex-col items-center">
+            <h1 class="text-[clamp(1.5rem,5vw,2.5rem)] font-bold text-shadow">认领茶树</h1>
+            <p class="text-lightGreen text-[clamp(0.8rem,3vw,1.2rem)] mt-1">绿美凡化</p>
+        </div>
+    </header>
+
+    <!-- 主体内容区 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 能量系统面板 -->
+        <section class="bg-white rounded-xl p-6 mb-8 card-shadow">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">我的能量</h2>
+                <span id="energyValue" class="text-darkGreen font-bold text-xl">65%</span>
+            </div>
+            
+            <div class="w-full bg-gray-200 rounded-full h-4 mb-6 overflow-hidden">
+                <div id="energyProgress" class="progress-bar bg-darkGreen h-full rounded-full" style="width: 65%"></div>
+            </div>
+            
+            <button id="findEnergyBtn" class="w-full bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                <i class="fa fa-bolt mr-2"></i> 找能量
+            </button>
+        </section>
+
+        <!-- 九宫格功能入口 -->
+        <section class="grid grid-cols-3 gap-4 mb-16">
+            <!-- 开始种树 -->
+            <a href="plant-tree.html" class="feature-card bg-white rounded-xl p-4 text-center card-shadow hover:shadow-lg transition duration-300 cursor-pointer">
+                <div class="w-16 h-16 bg-lightGreen rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-2xl">🌱</span>
+                </div>
+                <h3 class="font-bold text-gray-800">开始种树</h3>
+            </a>
+            
+            <!-- 种树职责 -->
+            <a href="plant-duty.html" class="feature-card bg-white rounded-xl p-4 text-center card-shadow hover:shadow-lg transition duration-300 cursor-pointer">
+                <div class="w-16 h-16 bg-lightGreen rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-2xl">📝</span>
+                </div>
+                <h3 class="font-bold text-gray-800">种树职责</h3>
+            </a>
+            
+            <!-- 找能量 -->
+            <a href="energy.html" class="feature-card bg-white rounded-xl p-4 text-center card-shadow hover:shadow-lg transition duration-300 cursor-pointer">
+                <div class="w-16 h-16 bg-lightGreen rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-2xl">⚡</span>
+                </div>
+                <h3 class="font-bold text-gray-800">找能量</h3>
+            </a>
+            
+            <!-- 攻略 -->
+            <a href="strategy.html" class="feature-card bg-white rounded-xl p-4 text-center card-shadow hover:shadow-lg transition duration-300 cursor-pointer">
+                <div class="w-16 h-16 bg-lightGreen rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-2xl">📚</span>
+                </div>
+                <h3 class="font-bold text-gray-800">攻略</h3>
+            </a>
+            
+            <!-- 个人中心 -->
+            <a href="profile.html" class="feature-card bg-white rounded-xl p-4 text-center card-shadow hover:shadow-lg transition duration-300 cursor-pointer">
+    <div class="w-16 h-16 bg-lightGreen rounded-full flex items-center justify-center mx-auto mb-3">
+        <span class="text-2xl">👤</span>
+    </div>
+    <h3 class="font-bold text-gray-800">个人中心</h3>
+</a>
+            
+            <!-- 更多 -->
+            <a href="settings.html" class="feature-card bg-white rounded-xl p-4 text-center card-shadow hover:shadow-lg transition duration-300 cursor-pointer">
+    <div class="w-16 h-16 bg-lightGreen rounded-full flex items-center justify-center mx-auto mb-3">
+        <span class="text-2xl">⋯</span>
+    </div>
+    <h3 class="font-bold text-gray-800">更多</h3>
+</a>
+            
+            <!-- 最新排名 -->
+            <a href="ranking.html" class="feature-card bg-white rounded-xl p-4 text-center card-shadow hover:shadow-lg transition duration-300 cursor-pointer">
+    <div class="w-16 h-16 bg-lightGreen rounded-full flex items-center justify-center mx-auto mb-3">
+        <span class="text-2xl">🏆</span>
+    </div>
+    <h3 class="font-bold text-gray-800">最新排名</h3>
+</a>
+        </section>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+        <div class="grid grid-cols-3 h-16">
+            <div class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-home text-xl mb-1"></i>
+                <span>首页</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-trophy text-xl mb-1"></i>
+                <span>排行榜</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-user text-xl mb-1"></i>
+                <span>个人中心</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 弹窗背景遮罩 -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden flex items-center justify-center p-4"></div>
+
+    <!-- 找能量弹窗 -->
+    <div id="energyModal" class="bg-white rounded-xl w-full max-w-md z-50 hidden overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-center mb-6" id="questionTitle">茶树知识问答</h3>
+            <div id="questionContainer" class="mb-6">
+                <!-- 问题内容将通过JS动态生成 -->
+            </div>
+            <div id="answerResult" class="mb-6 text-center hidden"></div>
+            <div class="flex justify-between">
+                <button id="prevQuestionBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300 hidden">上一题</button>
+                <button id="nextQuestionBtn" class="bg-mediumGreen hover:bg-darkGreen text-white font-bold py-2 px-4 rounded-lg transition duration-300">下一题</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 开始种树弹窗 -->
+    <div id="plantTreeModal" class="bg-white rounded-xl w-full max-w-md z-50 hidden overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-center mb-4">我的茶树</h3>
+            
+            <div class="text-center mb-6">
+                <div id="treeStage" class="text-6xl mb-2">🌱</div>
+                <p id="treeStatus" class="text-gray-700">幼苗阶段</p>
+            </div>
+            
+            <div class="mb-6">
+                <p class="text-gray-700 mb-2">当前能量: <span id="fertilizerEnergy">65</span>/100</p>
+                <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                    <div id="fertilizerProgress" class="progress-bar bg-darkGreen h-full rounded-full" style="width: 65%"></div>
+                </div>
+                <p class="text-sm text-gray-500">每积累100能量可兑换1次施肥</p>
+            </div>
+            
+            <button id="fertilizeBtn" class="w-full bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                <i class="fa fa-leaf mr-2"></i> 施肥
+            </button>
+        </div>
+    </div>
+
+    <!-- 种树职责弹窗 -->
+    <div id="plantDutyModal" class="bg-white rounded-xl w-full max-w-md z-50 hidden overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-center mb-6">种植记录</h3>
+            
+            <div class="space-y-4">
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                    <span class="text-gray-600">种植日期:</span>
+                    <span class="font-medium">2023-11-01</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                    <span class="text-gray-600">养护次数:</span>
+                    <span class="font-medium">3次</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                    <span class="text-gray-600">生长状态:</span>
+                    <span class="font-medium text-green-600">健康</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                    <span class="text-gray-600">下次养护提醒:</span>
+                    <span class="font-medium">2天后</span>
+                </div>
+            </div>
+            
+            <button id="closeDutyBtn" class="w-full mt-6 bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                知道了
+            </button>
+        </div>
+    </div>
+
+    <!-- 攻略弹窗 -->
+    <div id="strategyModal" class="bg-white rounded-xl w-full max-w-md z-50 hidden overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-center mb-6">游戏规则</h3>
+            
+            <div class="space-y-4 text-gray-700">
+                <div class="flex items-start">
+                    <i class="fa fa-check-circle text-darkGreen mt-1 mr-2"></i>
+                    <p>每积累100能量可兑换1次施肥机会</p>
+                </div>
+                <div class="flex items-start">
+                    <i class="fa fa-check-circle text-darkGreen mt-1 mr-2"></i>
+                    <p>茶树成熟后可兑换凡化村茶叶礼品</p>
+                </div>
+                <div class="flex items-start">
+                    <i class="fa fa-check-circle text-darkGreen mt-1 mr-2"></i>
+                    <p>每日最多可通过答题获得15能量</p>
+                </div>
+                <div class="flex items-start">
+                    <i class="fa fa-check-circle text-darkGreen mt-1 mr-2"></i>
+                    <p>茶树成长分为三个阶段：幼苗→成苗→成熟</p>
+                </div>
+                <div class="flex items-start">
+                    <i class="fa fa-check-circle text-darkGreen mt-1 mr-2"></i>
+                    <p>定期养护可加速茶树生长</p>
+                </div>
+            </div>
+            
+            <button id="closeStrategyBtn" class="w-full mt-6 bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                明白了
+            </button>
+        </div>
+    </div>
+
+    <!-- 个人中心弹窗 -->
+    <div id="profileModal" class="bg-white rounded-xl w-full max-w-md z-50 hidden overflow-hidden">
+        <div class="p-6">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-lightGreen rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fa fa-user text-3xl text-darkGreen"></i>
+                </div>
+                <h3 class="text-xl font-bold" id="userName">茶农12345</h3>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="bg-lightGreen rounded-lg p-4 text-center">
+                    <p class="text-gray-600 text-sm mb-1">拥有茶苗</p>
+                    <p class="text-2xl font-bold text-darkGreen" id="treeCount">2株</p>
+                </div>
+                <div class="bg-lightGreen rounded-lg p-4 text-center">
+                    <p class="text-gray-600 text-sm mb-1">总能量</p>
+                    <p class="text-2xl font-bold text-darkGreen" id="totalEnergy">120</p>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h4 class="font-bold text-gray-800 mb-2">我的成就</h4>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-lightGreen rounded-full flex items-center justify-center mr-3">
+                        <span class="text-xl">🌿</span>
+                    </div>
+                    <span>新茶农</span>
+                </div>
+            </div>
+            
+            <button id="closeProfileBtn" class="w-full bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                返回
+            </button>
+        </div>
+    </div>
+
+    <!-- 更多设置弹窗 -->
+    <div id="moreModal" class="bg-white rounded-xl w-full max-w-md z-50 hidden overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-center mb-6">设置</h3>
+            
+            <div class="space-y-6">
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-700">背景音乐</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="musicToggle" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-darkGreen"></div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-700">音量</span>
+                        <span id="volumeValue">80%</span>
+                    </div>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="80" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-darkGreen">
+                </div>
+                
+                <div>
+                    <button id="aboutBtn" class="w-full text-left text-gray-700 py-2 border-b border-gray-100">
+                        <i class="fa fa-info-circle mr-2"></i> 关于我们
+                    </button>
+                </div>
+            </div>
+            
+            <button id="closeMoreBtn" class="w-full mt-6 bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                保存设置
+            </button>
+        </div>
+    </div>
+
+    <!-- 关于我们弹窗 -->
+    <div id="aboutModal" class="bg-white rounded-xl w-full max-w-md z-50 hidden overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-center mb-4">关于凡化村</h3>
+            
+            <div class="text-gray-700 space-y-3 max-h-60 overflow-y-auto pr-2">
+                <p>凡化村位于中国云南省，是一个以茶叶种植为主的传统村落。这里气候温和，雨量充沛，土壤肥沃，非常适合茶树生长。</p>
+                <p>凡化村的茶叶种植历史已有数百年，当地茶农积累了丰富的种茶经验。这里出产的茶叶以香气浓郁、滋味醇厚而闻名。</p>
+                <p>通过"凡化茶树"公益小程序，我们希望能够让更多人了解凡化村的茶文化，支持当地茶农的生活，共同守护这片绿水青山。</p>
+                <p>每一棵认领的茶树，都将为凡化村带来实际的帮助，也为您带来一份来自大自然的馈赠。</p>
+            </div>
+            
+            <button id="closeAboutBtn" class="w-full mt-6 bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                返回
+            </button>
+        </div>
+    </div>
+
+    <!-- 排行榜弹窗 -->
+    <div id="rankingModal" class="bg-white rounded-xl w-full max-w-md z-50 hidden overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-center mb-6">茶农排行榜</h3>
+            
+            <div class="space-y-3 max-h-80 overflow-y-auto pr-2">
+                <div class="flex items-center p-3 bg-yellow-50 rounded-lg">
+                    <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-white mr-3">1</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农A</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">5</span>
+                        <span>株</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center font-bold text-white mr-3">2</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农B</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">4</span>
+                        <span>株</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center p-3 bg-amber-50 rounded-lg">
+                    <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center font-bold text-white mr-3">3</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农C</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">3</span>
+                        <span>株</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center p-3 rounded-lg">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-700 mr-3">4</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农D</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">3</span>
+                        <span>株</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center p-3 rounded-lg">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-700 mr-3">5</div>
+                    <div class="flex-1">
+                        <p class="font-medium">茶农E</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">2</span>
+                        <span>株</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center p-3 bg-lightGreen bg-opacity-30 rounded-lg border-2 border-darkGreen">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-700 mr-3">6</div>
+                    <div class="flex-1">
+                        <p class="font-medium font-bold">茶农12345 (你)</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-bold text-darkGreen mr-1">2</span>
+                        <span>株</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="closeRankingBtn" class="w-full mt-6 bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                关闭
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 初始化应用数据
+        function initAppData() {
+            const today = new Date().toISOString().split('T')[0];
+            const appData = localStorage.getItem('teaPlantAppData');
+            
+            if (!appData) {
+                // 首次使用，初始化数据
+                const initialData = {
+                    energy: 65,
+                    maxEnergy: 100,
+                    totalEnergy: 120,
+                    treeCount: 2,
+                    treeStage: 0, // 0: 幼苗, 1: 成苗, 2: 成熟
+                    lastEnergyDate: null,
+                    dailyEnergyEarned: 0,
+                    userName: `茶农${Math.floor(10000 + Math.random() * 90000)}`
+                };
+                localStorage.setItem('teaPlantAppData', JSON.stringify(initialData));
+                console.log('初始化应用数据完成');
+                return initialData;
+            } else {
+                const data = JSON.parse(appData);
+                // 检查是否是新的一天，重置每日能量获取
+                if (data.lastEnergyDate !== today) {
+                    data.dailyEnergyEarned = 0;
+                    data.lastEnergyDate = today;
+                    localStorage.setItem('teaPlantAppData', JSON.stringify(data));
+                    console.log('新的一天，重置每日能量获取');
+                }
+                return data;
+            }
+        }
+
+        // 获取应用数据
+        function getAppData() {
+            const appData = localStorage.getItem('teaPlantAppData');
+            return appData ? JSON.parse(appData) : initAppData();
+        }
+
+        // 保存应用数据
+        function saveAppData(data) {
+            localStorage.setItem('teaPlantAppData', JSON.stringify(data));
+            console.log('应用数据已保存');
+        }
+
+        // 更新UI显示
+        function updateUI() {
+            const data = getAppData();
+            
+            // 更新能量显示
+            const energyPercent = Math.min(100, Math.round((data.energy / data.maxEnergy) * 100));
+            document.getElementById('energyValue').textContent = `${energyPercent}%`;
+            document.getElementById('energyProgress').style.width = `${energyPercent}%`;
+            
+            // 更新种树弹窗中的能量显示
+            document.getElementById('fertilizerEnergy').textContent = data.energy;
+            document.getElementById('fertilizerProgress').style.width = `${energyPercent}%`;
+            
+            // 更新茶树阶段显示
+            const treeStages = ['🌱', '🌿', '🍵'];
+            const treeStatusTexts = ['幼苗阶段', '成苗阶段', '成熟阶段'];
+            document.getElementById('treeStage').textContent = treeStages[data.treeStage];
+            document.getElementById('treeStatus').textContent = treeStatusTexts[data.treeStage];
+            
+            // 更新个人中心数据
+            document.getElementById('userName').textContent = data.userName;
+            document.getElementById('treeCount').textContent = `${data.treeCount}株`;
+            document.getElementById('totalEnergy').textContent = data.totalEnergy;
+        }
+
+        // 题库
+        const questionBank = [
+            {
+                question: "茶树最佳种植海拔是？",
+                options: [
+                    { text: "800-1200米", correct: true },
+                    { text: "200-500米", correct: false },
+                    { text: "1500米以上", correct: false }
+                ]
+            },
+            {
+                question: "以下哪种土壤最适合茶树生长？",
+                options: [
+                    { text: "砂质土", correct: false },
+                    { text: "黏质土", correct: false },
+                    { text: "酸性红壤", correct: true }
+                ]
+            },
+            {
+                question: "茶树的最适生长温度是？",
+                options: [
+                    { text: "10-15℃", correct: false },
+                    { text: "20-30℃", correct: true },
+                    { text: "35-40℃", correct: false }
+                ]
+            },
+            {
+                question: "茶叶采摘的最佳时间通常是？",
+                options: [
+                    { text: "清晨", correct: true },
+                    { text: "中午", correct: false },
+                    { text: "傍晚", correct: false }
+                ]
+            },
+            {
+                question: "茶树一般几年可以开始采摘？",
+                options: [
+                    { text: "当年", correct: false },
+                    { text: "2-3年", correct: true },
+                    { text: "5年以上", correct: false }
+                ]
+            }
+        ];
+
+        // 当前答题状态
+        let quizState = {
+            currentQuestion: 0,
+            selectedQuestions: [],
+            correctAnswers: 0
+        };
+
+        // 随机选择3道题
+        function selectRandomQuestions() {
+            // 复制题库并打乱顺序
+            const shuffledQuestions = [...questionBank].sort(() => Math.random() - 0.5);
+            // 选择前3道题
+            quizState.selectedQuestions = shuffledQuestions.slice(0, 3);
+            quizState.currentQuestion = 0;
+            quizState.correctAnswers = 0;
+        }
+
+        // 显示问题
+        function displayQuestion() {
+            const questionContainer = document.getElementById('questionContainer');
+            const question = quizState.selectedQuestions[quizState.currentQuestion];
+            
+            // 清空容器
+            questionContainer.innerHTML = '';
+            
+            // 添加问题标题
+            const questionTitle = document.createElement('h4');
+            questionTitle.className = 'text-lg font-bold mb-4 text-gray-800';
+            questionTitle.textContent = `${quizState.currentQuestion + 1}. ${question.question}`;
+            questionContainer.appendChild(questionTitle);
+            
+            // 添加选项
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'mb-3';
+                
+                const label = document.createElement('label');
+                label.className = 'flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-lightGreen hover:bg-opacity-30 transition duration-200';
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'quizOption';
+                input.value = index;
+                input.className = 'mr-3 h-5 w-5 accent-darkGreen';
+                
+                const optionText = document.createElement('span');
+                optionText.textContent = option.text;
+                
+                label.appendChild(input);
+                label.appendChild(optionText);
+                optionDiv.appendChild(label);
+                questionContainer.appendChild(optionDiv);
+            });
+            
+            // 更新按钮状态
+            document.getElementById('prevQuestionBtn').classList.toggle('hidden', quizState.currentQuestion === 0);
+            
+            if (quizState.currentQuestion === quizState.selectedQuestions.length - 1) {
+                document.getElementById('nextQuestionBtn').textContent = '提交答案';
+            } else {
+                document.getElementById('nextQuestionBtn').textContent = '下一题';
+            }
+            
+            // 隐藏答案结果
+            document.getElementById('answerResult').classList.add('hidden');
+        }
+
+        // 检查答案
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="quizOption"]:checked');
+            
+            if (!selectedOption) {
+                alert('请选择一个答案');
+                return false;
+            }
+            
+            const question = quizState.selectedQuestions[quizState.currentQuestion];
+            const isCorrect = question.options[selectedOption.value].correct;
+            
+            const answerResult = document.getElementById('answerResult');
+            
+            if (isCorrect) {
+                answerResult.textContent = '回答正确！获得5能量！';
+                answerResult.className = 'mb-6 text-center text-green-600 font-bold';
+                quizState.correctAnswers++;
+                
+                // 更新能量
+                const data = getAppData();
+                const energyToAdd = 5;
+                
+                // 检查是否达到每日上限
+                if (data.dailyEnergyEarned + energyToAdd > 15) {
+                    const remainingEnergy = 15 - data.dailyEnergyEarned;
+                    data.energy += remainingEnergy;
+                    data.totalEnergy += remainingEnergy;
+                    data.dailyEnergyEarned = 15;
+                    console.log(`已达每日能量上限，获得${remainingEnergy}能量`);
+                } else {
+                    data.energy += energyToAdd;
+                    data.totalEnergy += energyToAdd;
+                    data.dailyEnergyEarned += energyToAdd;
+                    console.log(`回答正确，获得${energyToAdd}能量`);
+                }
+                
+                // 能量不超过最大值
+                if (data.energy > data.maxEnergy) {
+                    data.energy = data.maxEnergy;
+                }
+                
+                saveAppData(data);
+                updateUI();
+            } else {
+                answerResult.textContent = '回答错误，再接再厉！';
+                answerResult.className = 'mb-6 text-center text-red-600 font-bold';
+                console.log('回答错误');
+            }
+            
+            answerResult.classList.remove('hidden');
+            return true;
+        }
+
+
+
+
+
+        // 初始化事件监听
+        function initEventListeners() {
+            // 按钮点击效果
+            document.querySelectorAll('button, a').forEach(element => {
+                element.addEventListener('mousedown', () => {
+                    element.classList.add('btn-press');
+                });
+                
+                element.addEventListener('mouseup', () => {
+                    element.classList.remove('btn-press');
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    element.classList.remove('btn-press');
+                });
+            });
+        }
+
+        // 初始化应用
+        function initApp() {
+            console.log('凡化茶树公益小程序初始化');
+            initAppData();
+            updateUI();
+            initEventListeners();
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>种树职责 - 凡化茶树</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkGreen: '#2E7D32',
+                        lightGreen: '#C8E6C9',
+                        mediumGreen: '#66BB6A',
+                        teaBrown: '#8D6E63',
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            .progress-bar {
+                transition: width 0.5s ease-in-out;
+            }
+            .btn-press {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 顶部标题栏 -->
+    <header class="bg-darkGreen text-white py-4 px-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <button id="backBtn" class="text-white">
+                <i class="fa fa-arrow-left text-xl"></i>
+            </button>
+            <div class="text-center">
+                <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold text-shadow">种树职责</h1>
+            </div>
+            <div class="w-10"></div> <!-- 占位元素，保持标题居中 -->
+        </div>
+    </header>
+
+    <!-- 主体内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <h3 class="text-xl font-bold text-center mb-6">种植记录</h3>
+            
+            <div class="space-y-4 mb-8">
+                <div class="flex justify-between py-3 border-b border-gray-100">
+                    <span class="text-gray-600">种植日期:</span>
+                    <span class="font-medium">2023-11-01</span>
+                </div>
+                <div class="flex justify-between py-3 border-b border-gray-100">
+                    <span class="text-gray-600">养护次数:</span>
+                    <span class="font-medium">3次</span>
+                </div>
+                <div class="flex justify-between py-3 border-b border-gray-100">
+                    <span class="text-gray-600">生长状态:</span>
+                    <span class="font-medium text-green-600">健康</span>
+                </div>
+                <div class="flex justify-between py-3 border-b border-gray-100">
+                    <span class="text-gray-600">下次养护提醒:</span>
+                    <span class="font-medium">2天后</span>
+                </div>
+            </div>
+            
+            <div class="bg-lightGreen bg-opacity-30 rounded-lg p-4 mb-6">
+                <h4 class="font-bold text-darkGreen mb-2 flex items-center">
+                    <i class="fa fa-lightbulb-o mr-2"></i> 今日养护任务
+                </h4>
+                <ul class="list-disc list-inside text-gray-700 space-y-1 pl-2">
+                    <li>检查茶树生长状况</li>
+                    <li>清除周围杂草</li>
+                    <li>确保土壤湿润</li>
+                </ul>
+            </div>
+            
+            <button id="completeTaskBtn" class="w-full bg-mediumGreen hover:bg-darkGreen text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                <i class="fa fa-check mr-2"></i> 完成今日养护
+            </button>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+        <div class="grid grid-cols-3 h-16">
+            <a href="index.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-home text-xl mb-1"></i>
+                <span>首页</span>
+            </a>
+            <a href="ranking.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-trophy text-xl mb-1"></i>
+                <span>排行榜</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-user text-xl mb-1"></i>
+                <span>个人中心</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化事件监听
+        function initEventListeners() {
+            // 返回按钮
+            document.getElementById('backBtn').addEventListener('click', () => {
+                window.history.back();
+            });
+            
+            // 完成任务按钮
+            document.getElementById('completeTaskBtn').addEventListener('click', () => {
+                // 获取应用数据
+                const appData = JSON.parse(localStorage.getItem('teaPlantAppData') || '{}');
+                
+                // 增加能量
+                const energyToAdd = 10;
+                appData.energy = (appData.energy || 0) + energyToAdd;
+                appData.totalEnergy = (appData.totalEnergy || 0) + energyToAdd;
+                
+                // 能量不超过最大值
+                if (appData.energy > (appData.maxEnergy || 100)) {
+                    appData.energy = appData.maxEnergy || 100;
+                }
+                
+                localStorage.setItem('teaPlantAppData', JSON.stringify(appData));
+                alert(`恭喜！完成今日养护任务，获得${energyToAdd}能量！`);
+                console.log(`完成养护任务，获得${energyToAdd}能量`);
+            });
+            
+            // 按钮点击效果
+            document.querySelectorAll('button, a').forEach(element => {
+                element.addEventListener('mousedown', () => {
+                    element.classList.add('btn-press');
+                });
+                
+                element.addEventListener('mouseup', () => {
+                    element.classList.remove('btn-press');
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    element.classList.remove('btn-press');
+                });
+            });
+        }
+
+        // 初始化应用
+        function initApp() {
+            console.log('种树职责页面初始化');
+            initEventListeners();
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

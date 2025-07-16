@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>找能量 - 凡化茶树</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkGreen: '#2E7D32',
+                        lightGreen: '#C8E6C9',
+                        mediumGreen: '#66BB6A',
+                        teaBrown: '#8D6E63',
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            .progress-bar {
+                transition: width 0.5s ease-in-out;
+            }
+            .btn-press {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+            .option-hover:hover {
+                background-color: rgba(102, 187, 106, 0.2);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 顶部标题栏 -->
+    <header class="bg-darkGreen text-white py-4 px-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <button id="backBtn" class="text-white">
+                <i class="fa fa-arrow-left text-xl"></i>
+            </button>
+            <div class="text-center">
+                <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold text-shadow">找能量</h1>
+            </div>
+            <div class="w-10"></div> <!-- 占位元素，保持标题居中 -->
+        </div>
+    </header>
+
+    <!-- 主体内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800" id="questionTitle">茶树知识问答</h3>
+                <div class="bg-lightGreen bg-opacity-50 text-darkGreen px-3 py-1 rounded-full text-sm font-medium">
+                    每日可获：<span id="dailyProgress">0</span>/15能量
+                </div>
+            </div>
+            
+            <div id="questionContainer" class="mb-8">
+                <!-- 问题内容将通过JS动态生成 -->
+            </div>
+            
+            <div id="answerResult" class="mb-6 text-center hidden py-3 rounded-lg"></div>
+            
+            <div class="flex justify-between">
+                <button id="prevQuestionBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg transition duration-300 hidden">上一题</button>
+                <button id="nextQuestionBtn" class="bg-mediumGreen hover:bg-darkGreen text-white font-bold py-2 px-6 rounded-lg transition duration-300">开始答题</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+        <div class="grid grid-cols-3 h-16">
+            <a href="index.html" class="flex flex-col items-center justify-center text-darkGreen font-medium">
+                <i class="fa fa-home text-xl mb-1"></i>
+                <span>首页</span>
+            </a>
+            <a href="ranking.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-trophy text-xl mb-1"></i>
+                <span>排行榜</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center justify-center text-gray-500 font-medium">
+                <i class="fa fa-user text-xl mb-1"></i>
+                <span>个人中心</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化应用数据
+        function initAppData() {
+            const today = new Date().toISOString().split('T')[0];
+            const appData = localStorage.getItem('teaPlantAppData');
+            
+            if (!appData) {
+                // 首次使用，初始化数据
+                const initialData = {
+                    energy: 65,
+                    maxEnergy: 100,
+                    totalEnergy: 120,
+                    treeCount: 2,
+                    treeStage: 0,
+                    lastEnergyDate: today,
+                    dailyEnergyEarned: 0,
+                    userName: `茶农${Math.floor(10000 + Math.random() * 90000)}`
+                };
+                localStorage.setItem('teaPlantAppData', JSON.stringify(initialData));
+                return initialData;
+            } else {
+                const data = JSON.parse(appData);
+                // 检查是否是新的一天，重置每日能量获取
+                if (data.lastEnergyDate !== today) {
+                    data.dailyEnergyEarned = 0;
+                    data.lastEnergyDate = today;
+                    localStorage.setItem('teaPlantAppData', JSON.stringify(data));
+                }
+                return data;
+            }
+        }
+
+        // 获取应用数据
+        function getAppData() {
+            const appData = localStorage.getItem('teaPlantAppData');
+            return appData ? JSON.parse(appData) : initAppData();
+        }
+
+        // 保存应用数据
+        function saveAppData(data) {
+            localStorage.setItem('teaPlantAppData', JSON.stringify(data));
+        }
+
+        // 更新UI显示
+        function updateUI() {
+            const data = getAppData();
+            document.getElementById('dailyProgress').textContent = data.dailyEnergyEarned;
+        }
+
+        // 题库
+        const questionBank = [
+            {
+                question: "茶树最佳种植海拔是？",
+                options: [
+                    { text: "800-1200米", correct: true },
+                    { text: "200-500米", correct: false },
+                    { text: "1500米以上", correct: false }
+                ]
+            },
+            {
+                question: "以下哪种土壤最适合茶树生长？",
+                options: [
+                    { text: "砂质土", correct: false },
+                    { text: "黏质土", correct: false },
+                    { text: "酸性红壤", correct: true }
+                ]
+            },
+            {
+                question: "茶树的最适生长温度是？",
+                options: [
+                    { text: "10-15℃", correct: false },
+                    { text: "20-30℃", correct: true },
+                    { text: "35-40℃", correct: false }
+                ]
+            },
+            {
+                question: "茶叶采摘的最佳时间通常是？",
+                options: [
+                    { text: "清晨", correct: true },
+                    { text: "中午", correct: false },
+                    { text: "傍晚", correct: false }
+                ]
+            },
+            {
+                question: "茶树一般几年可以开始采摘？",
+                options: [
+                    { text: "当年", correct: false },
+                    { text: "2-3年", correct: true },
+                    { text: "5年以上", correct: false }
+                ]
+            }
+        ];
+
+        // 当前答题状态
+        let quizState = {
+            currentQuestion: 0,
+            selectedQuestions: [],
+            correctAnswers: 0
+        };
+
+        // 随机选择3道题
+        function selectRandomQuestions() {
+            // 复制题库并打乱顺序
+            const shuffledQuestions = [...questionBank].sort(() => Math.random() - 0.5);
+            // 选择前3道题
+            quizState.selectedQuestions = shuffledQuestions.slice(0, 3);
+            quizState.currentQuestion = 0;
+            quizState.correctAnswers = 0;
+        }
+
+        // 显示问题
+        function displayQuestion() {
+            const data = getAppData();
+            
+            // 检查是否已达每日上限
+            if (data.dailyEnergyEarned >= 15) {
+                document.getElementById('questionTitle').textContent = '今日能量已达上限';
+                document.getElementById('questionContainer').innerHTML = '<p class="text-center text-gray-700 py-8">您今天已经获得了15能量，明天再来吧！</p>';
+                document.getElementById('nextQuestionBtn').textContent = '返回首页';
+                document.getElementById('prevQuestionBtn').classList.add('hidden');
+                return;
+            }
+
+            const questionContainer = document.getElementById('questionContainer');
+            const question = quizState.selectedQuestions[quizState.currentQuestion];
+            
+            // 清空容器
+            questionContainer.innerHTML = '';
+            
+            // 添加问题标题
+            const questionTitle = document.createElement('h4');
+            questionTitle.className = 'text-lg font-bold mb-6 text-gray-800';
+            questionTitle.textContent = `${quizState.currentQuestion + 1}/${quizState.selectedQuestions.length}. ${question.question}`;
+            questionContainer.appendChild(questionTitle);
+            
+            // 添加选项
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'mb-3';
+                
+                const label = document.createElement('label');
+                label.className = 'flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer option-hover transition duration-200';
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'quizOption';
+                input.value = index;
+                input.className = 'mr-3 h-5 w-5 accent-darkGreen';
+                
+                const optionText = document.createElement('span');
+                optionText.textContent = option.text;
+                
+                label.appendChild(input);
+                label.appendChild(optionText);
+                optionDiv.appendChild(label);
+                questionContainer.appendChild(optionDiv);
+            });
+            
+            // 更新按钮状态
+            document.getElementById('prevQuestionBtn').classList.toggle('hidden', quizState.currentQuestion === 0);
+            
+            if (quizState.currentQuestion === quizState.selectedQuestions.length - 1) {
+                document.getElementById('nextQuestionBtn').textContent = '提交答案';
+            } else {
+                document.getElementById('nextQuestionBtn').textContent = '下一题';
+            }
+            
+            // 隐藏答案结果
+            document.getElementById('answerResult').classList.add('hidden');
+        }
+
+        // 检查答案
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="quizOption"]:checked');
+            
+            if (!selectedOption) {
+                alert('请选择一个答案');
+                return false;
+            }
+            
+            const question = quizState.selectedQuestions[quizState.currentQuestion];
+            const isCorrect = question.options[selectedOption.value].correct;
+            
+            const answerResult = document.getElementById('answerResult');
+            const data = getAppData();
+            
+            if (isCorrect) {
+                answerResult.textContent = '回答正确！获得5能量！';
+                answerResult.className = 'mb-6 text-center text-green-600 font-bold bg-green-50 py-3 rounded-lg';
+                quizState.correctAnswers++;
+                
+                // 更新能量
+                const energyToAdd = 5;
+                
+                // 检查是否达到每日上限
+                if (data.dailyEnergyEarned + energyToAdd > 15) {
+                    const remainingEnergy = 15 - data.dailyEnergyEarned;
+                    data.energy += remainingEnergy;
+                    data.totalEnergy += remainingEnergy;
+                    data.dailyEnergyEarned = 15;
+                    console.log(`已达每日能量上限，获得${remainingEnergy}能量`);
+                } else {
+                    data.energy += energyToAdd;
+                    data.totalEnergy += energyToAdd;
+                    data.dailyEnergyEarned += energyToAdd;
+                    console.log(`回答正确，获得${energyToAdd}能量`);
+                }
+                
+                // 能量不超过最大值
+                if (data.energy > data.maxEnergy) {
+                    data.energy = data.maxEnergy;
+                }
+                
+                saveAppData(data);
+                updateUI();
+            } else {
+                answerResult.textContent = '回答错误，再接再厉！';
+                answerResult.className = 'mb-6 text-center text-red-600 font-bold bg-red-50 py-3 rounded-lg';
+                console.log('回答错误');
+            }
+            
+            answerResult.classList.remove('hidden');
+            return true;
+        }
+
+        // 初始化事件监听
+        function initEventListeners() {
+            // 返回按钮
+            document.getElementById('backBtn').addEventListener('click', () => {
+                window.history.back();
+            });
+            
+            // 下一题/提交按钮
+            document.getElementById('nextQuestionBtn').addEventListener('click', () => {
+                const data = getAppData();
+                
+                // 如果已达上限，返回首页
+                if (data.dailyEnergyEarned >= 15) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+                
+                // 如果是开始答题按钮
+                if (document.getElementById('nextQuestionBtn').textContent === '开始答题') {
+                    selectRandomQuestions();
+                    displayQuestion();
+                    return;
+                }
+                
+                // 检查是否是最后一题
+                if (quizState.currentQuestion === quizState.selectedQuestions.length - 1) {
+                    // 检查答案
+                    if (checkAnswer()) {
+                        setTimeout(() => {
+                            alert(`答题完成！共答对${quizState.correctAnswers}题，获得${quizState.correctAnswers * 5}能量！`);
+                            window.location.href = 'index.html';
+                        }, 1000);
+                    }
+                } else {
+                    // 检查答案
+                    if (checkAnswer()) {
+                        quizState.currentQuestion++;
+                        setTimeout(displayQuestion, 1000);
+                    }
+                }
+            });
+            
+            // 上一题按钮
+            document.getElementById('prevQuestionBtn').addEventListener('click', () => {
+                if (quizState.currentQuestion > 0) {
+                    quizState.currentQuestion--;
+                    displayQuestion();
+                }
+            });
+            
+            // 按钮点击效果
+            document.querySelectorAll('button, a').forEach(element => {
+                element.addEventListener('mousedown', () => {
+                    element.classList.add('btn-press');
+                });
+                
+                element.addEventListener('mouseup', () => {
+                    element.classList.remove('btn-press');
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    element.classList.remove('btn-press');
+                });
+            });
+        }
+
+        // 初始化应用
+        function initApp() {
+            console.log('找能量页面初始化');
+            initAppData();
+            updateUI();
+            initEventListeners();
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
